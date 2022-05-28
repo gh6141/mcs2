@@ -67,3 +67,25 @@ class SnippetDetailTest(TestCase):
     def test_top_page_returns_200_and_expected_heading(self):
         response = self.client.get("/mcsmain/%s/" % self.mcsmain.id)
         self.assertContains(response, self.mcsmain.title, status_code=200)
+
+
+class CreateSnippetTest(TestCase):
+    def setUp(self):
+        self.user = UserModel.objects.create(
+            username="test_user",
+            email="test@example.com",
+            password="secret",
+        )
+        self.client.force_login(self.user)
+
+    def test_render_creation_form(self):
+        response = self.client.get("/mcsmain/new/")
+        self.assertContains(response, "メッセージの登録", status_code=200)
+
+    def test_create_snippet(self):
+        data = {'title': 'タイトル', 'naiyo': '内容', 'hitokoto': 'ひとこと'}
+        self.client.post("/mcsmain/new/", data)
+        data2= Mcsmain.objects.get(title='タイトル')
+        self.assertEqual('内容', data2.naiyo)
+        self.assertEqual('ひとこと', data2.hitokoto)
+
