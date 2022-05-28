@@ -1,11 +1,28 @@
+{% load static %}
+{% load django_bootstrap5 %}
 <html>
 <head>
     <meta charset="utf-8">
     <title>Blanche</title>
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <link rel="stylesheet" href="{% static 'mcsmain/css/style.css' %}"
 </head>
 <body>
-    <h1>Under Construction   Blanche！</h1>
-    <h2>test data 一覧</h2>
+<nav class='navbar navbar-expand flex-md-row navbar-dark bg-dark'>
+    <div class='container justify-content-between'>
+        <a href='/' class='navbar-brand'>Blanche TopPage</a>
+    </div>
+</nav>
+<main>
+    <div class='container'>
+        <div class='welcome'>
+            <h1 class='title'>Under Construction   Blanche！</h1>
+            <p class='subtitle'>blanche(ブランシュ)は幸せになりたいアナタを全力で応援します</p>
+            <a class='btn btn-primary' href='{% url 'mcsmain_new' %}'>メッセージの作成</a>
+        </div>
+
+
     {% if mcsmain %}
     <table class="table">
         <thead>
@@ -28,6 +45,8 @@
     {% else %}
     <p>メッセージはまだ投稿されていません。</p>
     {% endif %}
+    </div>
+</main>
 </body>
 </html>
 
