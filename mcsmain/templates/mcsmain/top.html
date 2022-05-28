@@ -1,0 +1,34 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Blanche</title>
+</head>
+<body>
+    <h1>Under Construction   Blanche！</h1>
+    <h2>test data 一覧</h2>
+    {% if mcsmain %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>投稿者</th>
+            <th>投稿日</th>
+            <th>タイトル</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for data in mcsmain %}
+        <tr>
+            <th>{{ data.created_by.username }}</th>
+            <th>{{ data.created_at }}</th>
+            <th><a href="{% url 'mcsmain_detail' data.id %}">{{ data.title }}</a></th>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>メッセージはまだ投稿されていません。</p>
+    {% endif %}
+</body>
+</html>
+
+

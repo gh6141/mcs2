@@ -1,46 +1,47 @@
-from django.http import HttpRequest
-from django.test import TestCase
+from django.contrib.auth import get_user_model
+from django.test import TestCase, RequestFactory
 from django.urls import resolve
 
-from mcsmain.views import top,mcsmain_new,mcsmain_edit,mcsmain_detail
+from mcsmain.models import Mcsmain
+from mcsmain.views import top, mcsmain_new, mcsmain_edit, mcsmain_detail
 
+UserModel = get_user_model()
 
-class TopPageViewTest(TestCase):
-    def test_top_returns_200(self):
-        request = HttpRequest()  # HttpRequestオブジェクトの作成
-        response = top(request)
-        self.assertEqual(response.status_code, 200)
-
-    def test_top_returns_expected_content(self):
-        request = HttpRequest()  # HttpRequestオブジェクトの作成
-        response = top(request)
-        self.assertEqual(response.content, b"Test Test")
 
 class TopPageTest(TestCase):
-    def test_top_returns_200(self):
+    def test_top_page_returns_200_and_expected_title(self):
         response = self.client.get("/")
-        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Blanche", status_code=200)
 
-    def test_top_returns_expected_content(self):
+    def test_top_page_uses_expected_template(self):
         response = self.client.get("/")
-        self.assertEqual(response.content, b"Test Test")
+        self.assertTemplateUsed(response, "mcsmain/top.html")
 
 
-class CreateMcsmainTest(TestCase):
-    def test_should_resolve_mcsmain_new(self):
-        found = resolve("/mcsmain/new/")
-        self.assertEqual(mcsmain_new, found.func)
+class TopPageRenderSnippetsTest(TestCase):
+    def setUp(self):
+        self.user = UserModel.objects.create(
+            username="test_user",
+            email="test@example.com",
+            password="top_secret_pass0001",
+        )
+        self.mcsmain = Mcsmain.objects.create(
+            title="title1",
+            naiyo="print('hello')",
+            hitokoto="description1",
+            created_by=self.user,
+        )
 
+    def test_should_return_snippet_title(self):
+        request = RequestFactory().get("/")
+        request.user = self.user
+        response = top(request)
+        self.assertContains(response, self.mcsmain.title)
 
-class McsmainDetailTest(TestCase):
-    def test_should_resolve_mcsmain_detail(self):
-        found = resolve("/mcsmain/1/")
-        self.assertEqual(mcsmain_detail, found.func)
-
-
-class EditMcsmainTest(TestCase):
-    def test_should_resolve_mcsmain_edit(self):
-        found = resolve("/mcsmain/1/edit/")
-        self.assertEqual(mcsmain_edit, found.func)
+    def test_should_return_username(self):
+        request = RequestFactory().get("/")
+        request.user = self.user
+        response = top(request)
+        self.assertContains(response, self.user.username)
 
 
