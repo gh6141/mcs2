@@ -45,3 +45,25 @@ class TopPageRenderSnippetsTest(TestCase):
         self.assertContains(response, self.user.username)
 
 
+
+class SnippetDetailTest(TestCase):
+    def setUp(self):
+        self.user = UserModel.objects.create(
+            username="test_user",
+            email="test@example.com",
+            password="secret",
+        )
+        self.mcsmain = Mcsmain.objects.create(
+            title="タイトル",
+            naiyo="コード",
+            hitokoto="解説",
+            created_by=self.user,
+        )
+
+    def test_should_use_expected_template(self):
+        response = self.client.get("/mcsmain/%s/" % self.mcsmain.id)
+        self.assertTemplateUsed(response, "mcsmain/mcsmain_detail.html")
+
+    def test_top_page_returns_200_and_expected_heading(self):
+        response = self.client.get("/mcsmain/%s/" % self.mcsmain.id)
+        self.assertContains(response, self.mcsmain.title, status_code=200)

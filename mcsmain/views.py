@@ -24,5 +24,7 @@ def mcsmain_edit(request, mcsmain_id):
 
 
 def mcsmain_detail(request, mcsmain_id):
-    return HttpResponse('詳細閲覧')
+    mcsmain = get_object_or_404(Mcsmain, pk=mcsmain_id)
+    return render(request, 'mcsmain/mcsmain_detail.html',
+                  {'mcsmain': mcsmain})
 
