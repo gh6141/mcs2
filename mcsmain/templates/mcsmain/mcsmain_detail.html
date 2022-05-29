@@ -1,14 +1,24 @@
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>メッセージ</title>
-</head>
-<body>
-<div>
-    <h2>{{ mcsmain.title }} by {{ mcsmain.created_by.username }}</h2>
-    <small>投稿日: {{ mcsmain.created_at }}</small>
-    <pre>{{ mcsmain.naiyo }}</pre>
-    <p>{{ mcsmain.hitokoto }}</p>
+{% extends "base.html" %}
+{% load pygmentize %}
+
+{% block extraheader %}
+<style>{% pygments_css %}</style>
+{% endblock %}
+
+{% block main %}
+<h2>{{ mcsmain.title }} by {{ mcsmain.created_by.username }}</h2>
+
+<div class="snippet-date">
+    投稿日: {{ mcsmain.created_at|date:"DATETIME_FORMAT" }}
+    {% if user.is_authenticated and mcsmain.created_by_id == user.id %}
+    <a href="{% url 'mcsmain_edit' mcsmain.id %}">編集</a>
+    {% endif %}
 </div>
-</body>
-</html>
+
+<div class="source-code">
+    {{ mcsmain.naiyo|pygmentize:"python3" }}
+</div>
+
+<p>{{ mcsmain.hitokoto }}</p>
+{% endblock %}
+
