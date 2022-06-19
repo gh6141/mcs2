@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'mcsmain.apps.McsmainConfig',
     'django_bootstrap5',
     'pygments_renderer',
+    'accounts.apps.AccountsConfig',
 ]
 
 MIDDLEWARE = [

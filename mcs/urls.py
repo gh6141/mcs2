@@ -24,5 +24,6 @@ urlpatterns = [
     path('mcsmain/',include('mcsmain.urls')),
     path('test/',testfunc),
     path('test2/',Hclass.as_view()),
+    path('accounts/',include('accounts.urls')),
 
 ]
