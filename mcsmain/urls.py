@@ -6,5 +6,6 @@ urlpatterns = [
     path("new/", views.mcsmain_new, name="mcsmain_new"),
     path("<int:mcsmain_id>/", views.mcsmain_detail, name="mcsmain_detail"),
     path("<int:mcsmain_id>/edit/", views.mcsmain_edit, name="mcsmain_edit"),
+    path("<int:mcsmain_id>/comments/new/",views.comment_new,name="comment_new"),
 ]
 

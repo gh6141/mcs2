@@ -1,10 +1,11 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 
 
-from mcsmain.models import Mcsmain
-from mcsmain.forms import McsmainForm
+from mcsmain.models import Mcsmain,Comment
+from mcsmain.forms import McsmainForm,CommentForm
 
 
 def top(request):
@@ -46,9 +47,27 @@ def mcsmain_edit(request, mcsmain_id):
     return render(request, 'mcsmain/mcsmain_edit.html', {'form': form})
 
 
-
+@login_required
 def mcsmain_detail(request, mcsmain_id):
     mcsmain = get_object_or_404(Mcsmain, pk=mcsmain_id)
+    comments=Comment.objects.filter(commented_to=mcsmain_id).all()
+    comment_form=CommentForm()
     return render(request, 'mcsmain/mcsmain_detail.html',
-                  {'mcsmain': mcsmain})
+                  {'mcsmain': mcsmain,'comments':comments,'comment_form':comment_form,})
+
+@login_required
+def comment_new(request,mcsmain_id):
+    mcsmain = get_object_or_404(Mcsmain, pk=mcsmain_id)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.commented_to=mcsmain
+            comment.commented_by = request.user
+            comment.save()
+            messages.add_message(request,messages.SUCCESS,"コメントを投稿しました。")
+    else:
+        messages.add_message(request,messages.ERROR,"コメントの投稿に失敗しました。")
+    return redirect('mcsmain_detail',mcsmain_id=mcsmain_id)
+
 
