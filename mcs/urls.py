@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path,include
 from .views import testfunc,Hclass
 from mcsmain.views import top
+from accounts.views import SignUpView
 
 urlpatterns = [
     path('', top , name='top'),
@@ -25,5 +26,6 @@ urlpatterns = [
     path('test/',testfunc),
     path('test2/',Hclass.as_view()),
     path('accounts/',include('accounts.urls')),
+   # path('accounts/signup/',SignUpView.as_view(),name='signup'),
 
 ]
