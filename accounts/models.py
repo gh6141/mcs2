@@ -1,3 +1,4 @@
+from lib2to3.pgen2.token import SEMI
 from django.contrib.auth.base_user import AbstractBaseUser,BaseUserManager
 from django.contrib.auth.models import PermissionsMixin,UserManager
 from django.contrib.auth.validators import ASCIIUsernameValidator
@@ -5,6 +6,7 @@ from django.core.mail import send_mail
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+import datetime
 
 # Create your models here.
 
@@ -35,53 +37,31 @@ class UserManager(BaseUserManager):
         return self._create_user(username, email, password, **extra_fields)
 
 
+    """
+Email（プロフィールには入れない）
+年齢　20歳から79歳まで 選択肢
 
-class Shokugyo(models.Model):
-    shokugyo = models.CharField('職業', max_length=128)                                    
-    def __str__(self):
-        return self.shokugyo
+好きなこと・メッセージ欄
 
-class Shumi(models.Model):
-    shumi = models.CharField('趣味', max_length=128)                                    
-    def __str__(self):
-        return self.shumi
+利用規約とプライバシーポリシーに同意 チェック
+プロフィール画像を入れる5枚
 
-class Nenrei(models.Model):
-    nenrei = models.CharField('年齢', max_length=40)                                    
-    def __str__(self):
-        return self.nenrei
-
-
-class Kenmei(models.Model):
-    kenmei = models.CharField('県名', max_length=20)                                    
-    def __str__(self):
-        return self.kenmei
-
-class Seibetu(models.Model):
-    seibetu = models.CharField('性別', max_length=10)                                    
-    def __str__(self):
-        return self.seibetu
-
-class Tabako(models.Model):
-    tabako = models.CharField('たばこ', max_length=40)                                    
-    def __str__(self):
-        return self.tabako
-
-class Osake(models.Model):
-    osake = models.CharField('お酒', max_length=40)                                    
-    def __str__(self):
-        return self.osake
-
-class Kekkonreki(models.Model):
-    kekkonreki = models.CharField('結婚歴', max_length=20)                                    
-    def __str__(self):
-        return self.kekkonreki
-
-class Kodomo(models.Model):
-    kodomo = models.CharField('子供', max_length=20)                                    
-    def __str__(self):
-        return self.kodomo
-
+"""
+SEX=(('male','男性'),('female','女性'))
+SHUMI=(('supotu','スポーツ（観覧も含む）'),('geijutu','美術・演劇・映画・音楽等鑑賞'),('ongaku','楽器演奏・カラオケ・ダンス等'),('shodo','書道・華道・茶道等'),('shugei','和裁・洋裁・手芸等'),('ryori','料理・菓子作り'),('engei','園芸・ガーデニング・畑'),('sosaku','日曜大工・絵画・彫刻・陶芸等'),('shasin','写真撮影'),('bungei','詩・和歌・俳句・小説'),('dokusho','読書'),('game','囲碁・将棋・ゲーム等'),('kengaku','動植物園・水族館等見学'),('camp','キャンプ'),('other','その他'))
+SGYO=(('eigyo','営業'),('','事務・管理'),('kikaku','企画・マーケティング・経営・管理職'),('sabisu','サービス・販売・外食'),('ribiyo','理美容・エステ・ネイル関係'),('web','Web・インターネット・ゲーム'),
+     ('creative','クリエイティブ（メディア・アパレル・デザイン）'),('senmonshoku','専門職（コンサルタント・士業・金融・不動産）'),('it','ITエンジニア（システム開発・SE・インフラ）'),
+     ('enjinia','エンジニア（機械・電気・電子・半導体・制御）'),('sozai','素材・化学・食品・医薬品技術職'),('kenchiku','建築・土木技術職'),('ginoko','技能工・設備・交通・運輸'),('iryo','医療・福祉・介護'),
+     ('sonota','教育・保育・公務員・農林水産・その他'))
+KMEI=(('hokkaido','北海道'),('aomori','青森県'),('iwate','岩手県'),('miyagi','宮城県'),('akita','秋田県'),('yamagata','山形県'),('hukusima','福島県'),('ibaraki','茨城県'),('tochigi','栃木県'),('gunma','群馬県'),
+      ('saitama','埼玉県'),('chiba','千葉県'),('tokyo','東京都'),('kanagawa','神奈川県'),('niigata','新潟県'),('toyama','富山県'),('isikawa','石川県'),('hukui','福井県'),('yamanasi','山梨県'),('nagano','長野県'),
+      ('gihu','岐阜県'),('sizuoka','静岡県'),('aichi','愛知県'),('mie','三重県'),('siga','滋賀県'),('kyoto','京都府'),('osaka','大阪府'),('hyogo','兵庫県'),('nara','奈良県'),('wakayama','和歌山県'),
+      ('tottori','鳥取県'),('simane','島根県'),('okayama','岡山県'),('hirosima','広島県'),('yamaguchi','山口県'),('tokusima','徳島県'),('kagawa','香川県'),('ehime','愛媛県'),('kochi','高知県'),('hukuoka','福岡県'),
+      ('saga','佐賀県'),('nagasaki','長崎県('),('kumamoto','熊本県'),('ooita','大分県'),('miyazaki','宮崎県'),('kagosima','鹿児島県'),('okinawa','沖縄県'))
+TBAKO=(('suu','吸う'),('motomoto','もともと吸わない'),('kinen','禁煙している'))
+OSAKE=(('mainichi','毎日飲む'),('shuichi','週数回程度飲む'),('tukiichi','月数回程度飲む'),('nomanai','飲まない'))
+KREKI=(('mikon','未婚'),('sibetu','死別'),('rikon','離婚'))
+KDOMO=(('nasi','なし'),('dokyo','同居中'),('bekkyo','別居中'))
 
 class User(AbstractBaseUser,PermissionsMixin):
     username_validator=ASCIIUsernameValidator()
@@ -105,12 +85,13 @@ class User(AbstractBaseUser,PermissionsMixin):
         },
     )
     email=models.EmailField(_('email address'),blank=False)
-    nenrei = models.ForeignKey( Nenrei,verbose_name="年齢",on_delete=models.PROTECT)
-    date_of_birth = models.DateField()
-    shussin = models.ForeignKey( Kenmei,verbose_name="出身",on_delete=models.PROTECT)
-    kyojuchi = models.ForeignKey( Kenmei,verbose_name="居住地",on_delete=models.PROTECT)
-    shokugyo = models.ForeignKey( Shokugyo,verbose_name="職業",on_delete=models.PROTECT)
-    shumi = models.ForeignKey( Shumi,verbose_name="趣味",on_delete=models.PROTECT)
+    sex=models.CharField(_('seibetu'),max_length=10,choices=SEX,blank=True)
+    nenrei = models.CharField(_('nenrei'),max_length=40,blank=True)
+    date_of_birth = models.DateField(_('dateofbirth'), default=datetime.date.today)
+    shussin = models.CharField(_('shussin'),max_length=40,choices=KMEI,blank=True)
+    kyojuchi = models.CharField(_('kyojuchi'),max_length=40,choices=KMEI,blank=True)
+    shokugyo = models.CharField(_('shokugyo'),max_length=40,choices=SGYO,blank=True)
+    shumi = models.CharField(_('shumi'),max_length=40,choices=SHUMI,blank=True)
 
     self_introduction=models.CharField(_('self introduction'),max_length=512,blank=True)
     doi_flg=models.BooleanField(
@@ -130,48 +111,13 @@ class User(AbstractBaseUser,PermissionsMixin):
     profile_photo5=models.ImageField(_('profile photo5'),upload_to='profile_photos5',
     null=True,blank=True)
 
-    tabako = models.ForeignKey( Tabako,verbose_name="たばこ",on_delete=models.PROTECT)
-    osake = models.ForeignKey( Osake,verbose_name="お酒",on_delete=models.PROTECT)
-    kekkonreki = models.ForeignKey( Kekkonreki,verbose_name="結婚歴",on_delete=models.PROTECT)
-    kodomo = models.ForeignKey( Kodomo,verbose_name="子供",on_delete=models.PROTECT)
+    tabako = models.CharField(_('tabako'),max_length=40,choices=TBAKO,blank=True)
+    osake = models.CharField(_('osake'),max_length=40,choices=OSAKE,blank=True)
 
-    """
-ユーザー名
-ニックネーム
-Email（プロフィールには入れない）
-年齢　20歳から79歳まで 選択肢
-性別
-出身　～県　選択肢
-居住地　県名　選択肢
-職種　
-＊営業
-事務・管理
-企画・マーケティング・経営・管理職
-サービス・販売・外食
-理美容・エステ・ネイル関係
-Web・インターネット・ゲーム
-クリエイティブ（メディア・アパレル・デザイン）
-専門職（コンサルタント・士業・金融・不動産）
-ITエンジニア（システム開発・SE・インフラ）
-エンジニア（機械・電気・電子・半導体・制御）
-素材・化学・食品・医薬品技術職
-建築・土木技術職
-技能工・設備・交通・運輸
-医療・福祉・介護
-教育・保育・公務員・農林水産・その他
-
-趣味（選択肢）
-好きなこと・メッセージ欄
-
-利用規約とプライバシーポリシーに同意 チェック
-プロフィール画像を入れる5枚
-タバコ：すう、もともとすわない、禁煙している
-お酒：のむ（毎日、週数回程度、月数回程度）、のまない
-結婚歴：未婚、死別、離婚
-子供：　なし　同居中　別居中
+    kekkonreki = models.CharField(_('kekkonreki'),max_length=40,choices=KREKI,blank=True)
+    kodomo = models.CharField(_('kodomo'),max_length=40,choices=KDOMO,blank=True)
 
 
-"""
 
 
     is_admin=models.BooleanField(default=False)

@@ -1,5 +1,4 @@
 from django.contrib import admin
-from accounts.models import Shokugyo,Shumi,Nenrei,Kenmei,Seibetu,Tabako,Osake,Kekkonreki,Kodomo
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.utils.translation import ugettext_lazy as _
@@ -25,7 +24,7 @@ class MyUserCreationForm(UserCreationForm):
 
 class MyUserAdmin(UserAdmin):
     fieldsets = (
-        (None, {'fields': ('username', 'password', 'username','kenme')}),
+        (None, {'fields': ('username', 'password', 'username','kyojuchi','kekkonreki')}),
         (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
                                        'groups', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
@@ -38,7 +37,7 @@ class MyUserAdmin(UserAdmin):
     )
     form = MyUserChangeForm
     add_form = MyUserCreationForm
-    list_display = ('email', 'username', 'is_staff')
+    list_display = ('email', 'username', 'is_staff','kyojuchi','kekkonreki')
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
     search_fields = ('email', 'username')
     ordering = ('email',)
@@ -73,7 +72,7 @@ class UserChangeForm(forms.ModelForm):#ユーザー更新フォームを作成
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'nickname', 'date_of_birth', 'is_active', 'is_admin')
+        fields = ('email', 'password', 'nickname', 'date_of_birth', 'is_active', 'is_admin','kyojuchi','kekkonreki')
 
 
 class UserAdmin(BaseUserAdmin):#Django管理サイトの画面を編集
@@ -81,13 +80,15 @@ class UserAdmin(BaseUserAdmin):#Django管理サイトの画面を編集
     form = UserChangeForm
     add_form = UserCreationForm
 
-    list_display = ('email', 'nickname', 'date_of_birth', 'is_admin')
+    list_display = ('email', 'nickname', 'date_of_birth', 'is_admin','kyojuchi','kekkonreki')
     list_filter = ('is_admin',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Personal name', {'fields': ('nickname',)}),
         ('Personal info', {'fields': ('date_of_birth',)}),
         ('Permissions', {'fields': ('is_admin',)}),
+         ('Kyojuchi', {'fields': ('kyojuchi',)}),
+         ('Kekkonreki', {'fields': ('kekkonreki',)}),
     )
     add_fieldsets = (
         (None, {
@@ -99,15 +100,7 @@ class UserAdmin(BaseUserAdmin):#Django管理サイトの画面を編集
     ordering = ('email',)
     filter_horizontal = ()
 
-admin.site.register(Shokugyo)
-admin.site.register(Shumi)
-admin.site.register(Nenrei)
-admin.site.register(Kenmei)
-admin.site.register(Seibetu)
-admin.site.register(Tabako)
-admin.site.register(Osake)
-admin.site.register(Kekkonreki)
-admin.site.register(Kodomo)
+
 admin.site.register(User,UserAdmin)
 admin.site.unregister(Group)#Django管理サイトからGroupモデルの削除
 # Register your models here.
