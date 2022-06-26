@@ -76,51 +76,51 @@ class User(AbstractBaseUser,PermissionsMixin):
     )
     nickname_validator=ASCIIUsernameValidator()
     nickname=models.CharField(
-        _('nickname'),
+        'ニックネーム',
         max_length=150,
         unique=True,
         validators=[nickname_validator],
         error_messages={
-            'unique': _("A user with that nickname already exists.")
+            'unique': '同じニックネームを使われている方がいます'
         },
     )
     email=models.EmailField(_('email address'),blank=False)
-    sex=models.CharField(_('seibetu'),max_length=10,choices=SEX,blank=True)
-    nenrei = models.CharField(_('nenrei'),max_length=40,blank=True)
-    date_of_birth = models.DateField(_('dateofbirth'), default=datetime.date.today)
-    shussin = models.CharField(_('shussin'),max_length=40,choices=KMEI,blank=True)
-    kyojuchi = models.CharField(_('kyojuchi'),max_length=40,choices=KMEI,blank=True)
-    shokugyo = models.CharField(_('shokugyo'),max_length=40,choices=SGYO,blank=True)
-    shumi = models.CharField(_('shumi'),max_length=40,choices=SHUMI,blank=True)
+    sex=models.CharField("性別",max_length=10,choices=SEX,blank=True)
+    nenrei = models.CharField("年齢",max_length=40,blank=True)
+    date_of_birth = models.DateField("生年月日", default=datetime.date.today)
+    shussin = models.CharField("出身地",max_length=40,choices=KMEI,blank=True)
+    kyojuchi = models.CharField("居住地",max_length=40,choices=KMEI,blank=True)
+    shokugyo = models.CharField("職業",max_length=40,choices=SGYO,blank=True)
+    shumi = models.CharField("趣味",max_length=40,choices=SHUMI,blank=True)
 
-    self_introduction=models.CharField(_('self introduction'),max_length=512,blank=True)
+    self_introduction=models.CharField("自己紹介",max_length=512,blank=True)
     doi_flg=models.BooleanField(
-        _('accept'),
+        "承認",
         default=False,
     )
 
 
-    profile_photo1=models.ImageField(_('profile photo1'),upload_to='profile_photos1',
+    profile_photo1=models.ImageField("プロファイル画像１",upload_to='profile_photos1',
     null=True,blank=True)
-    profile_photo2=models.ImageField(_('profile photo2'),upload_to='profile_photos2',
+    profile_photo2=models.ImageField("プロファイル画像２",upload_to='profile_photos2',
     null=True,blank=True)
-    profile_photo3=models.ImageField(_('profile photo3'),upload_to='profile_photos3',
+    profile_photo3=models.ImageField("プロファイル画像３",upload_to='profile_photos3',
     null=True,blank=True)
-    profile_photo4=models.ImageField(_('profile photo4'),upload_to='profile_photos4',
+    profile_photo4=models.ImageField("プロファイル画像４",upload_to='profile_photos4',
     null=True,blank=True)
-    profile_photo5=models.ImageField(_('profile photo5'),upload_to='profile_photos5',
+    profile_photo5=models.ImageField("プロファイル画像５",upload_to='profile_photos5',
     null=True,blank=True)
 
-    tabako = models.CharField(_('tabako'),max_length=40,choices=TBAKO,blank=True)
-    osake = models.CharField(_('osake'),max_length=40,choices=OSAKE,blank=True)
+    tabako = models.CharField("たばこ",max_length=40,choices=TBAKO,blank=True)
+    osake = models.CharField("お酒",max_length=40,choices=OSAKE,blank=True)
 
-    kekkonreki = models.CharField(_('kekkonreki'),max_length=40,choices=KREKI,blank=True)
-    kodomo = models.CharField(_('kodomo'),max_length=40,choices=KDOMO,blank=True)
-
-
+    kekkonreki = models.CharField("結婚歴",max_length=40,choices=KREKI,blank=True)
+    kodomo = models.CharField("子供",max_length=40,choices=KDOMO,blank=True)
 
 
-    is_admin=models.BooleanField(default=False)
+
+
+    is_admin=models.BooleanField("管理者権限",default=False)
     is_staff=models.BooleanField(
         _('active'),
         default=True,
@@ -128,7 +128,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     date_joined=models.DateTimeField(_('date joined'),default=timezone.now)
 
     is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
+   
 
     objects=UserManager()
 

@@ -85,10 +85,9 @@ class UserAdmin(BaseUserAdmin):#Django管理サイトの画面を編集
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Personal name', {'fields': ('nickname',)}),
-        ('Personal info', {'fields': ('date_of_birth',)}),
+        ('Personal info', {'fields': ('date_of_birth','kyojuchi','kekkonreki')}),
         ('Permissions', {'fields': ('is_admin',)}),
-         ('Kyojuchi', {'fields': ('kyojuchi',)}),
-         ('Kekkonreki', {'fields': ('kekkonreki',)}),
+    
     )
     add_fieldsets = (
         (None, {
