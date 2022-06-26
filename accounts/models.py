@@ -1,4 +1,4 @@
-from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.base_user import AbstractBaseUser,BaseUserManager
 from django.contrib.auth.models import PermissionsMixin,UserManager
 from django.contrib.auth.validators import ASCIIUsernameValidator
 from django.core.mail import send_mail
@@ -7,6 +7,34 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
+
+class UserManager(BaseUserManager):
+    use_in_migrations = True
+
+    def _create_user(self, username, email, password, **extra_fields):
+        if not email:
+            raise ValueError('Emailを入力して下さい')
+        email = self.normalize_email(email)
+        username = self.model.normalize_username(username)
+        user = self.model(username=username, email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self.db)
+        return user
+    def create_user(self, username, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', False)
+        extra_fields.setdefault('is_superuser', False)
+        return self._create_user(email, password, **extra_fields)
+
+    def create_superuser(self, username, email, password, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('is_staff=Trueである必要があります。')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('is_superuser=Trueである必要があります。')
+        return self._create_user(username, email, password, **extra_fields)
+
+
 
 class Shokugyo(models.Model):
     shokugyo = models.CharField('職業', max_length=128)                                    
@@ -22,6 +50,7 @@ class Nenrei(models.Model):
     nenrei = models.CharField('年齢', max_length=40)                                    
     def __str__(self):
         return self.nenrei
+
 
 class Kenmei(models.Model):
     kenmei = models.CharField('県名', max_length=20)                                    
@@ -77,6 +106,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     )
     email=models.EmailField(_('email address'),blank=False)
     nenrei = models.ForeignKey( Nenrei,verbose_name="年齢",on_delete=models.PROTECT)
+    date_of_birth = models.DateField()
     shussin = models.ForeignKey( Kenmei,verbose_name="出身",on_delete=models.PROTECT)
     kyojuchi = models.ForeignKey( Kenmei,verbose_name="居住地",on_delete=models.PROTECT)
     shokugyo = models.ForeignKey( Shokugyo,verbose_name="職業",on_delete=models.PROTECT)
@@ -150,6 +180,9 @@ ITエンジニア（システム開発・SE・インフラ）
         default=True,
     )
     date_joined=models.DateTimeField(_('date joined'),default=timezone.now)
+
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
 
     objects=UserManager()
 
