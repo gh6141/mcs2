@@ -3,7 +3,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import views
 from django.urls import path,include
 from django.views.generic import CreateView
-from accounts.views import SignUpView
+from accounts.views import SignUpView,ProfileCreateView
 
 urlpatterns = [
 
@@ -13,6 +13,7 @@ urlpatterns = [
    #     success_url='/',
    # ), name='signup'),
     path('signup/',SignUpView.as_view(),name='signup'),
+    path('profile_create/',ProfileCreateView.as_view(),name='profile_create'),
     
     path('login/', LoginView.as_view(
         redirect_authenticated_user=True,
