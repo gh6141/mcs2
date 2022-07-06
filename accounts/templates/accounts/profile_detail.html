@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block main %}
+<h2>プロファイルの編集 {{ user.username }}</h2>
+
+<div class="snippet-date">
+    登録日: {{ user.created_at|date:"DATETIME_FORMAT" }}
+    
+    <a href="{% url 'profile_edit' user.id %}">編集</a>
+   
+</div>
+
+<div class="source-code">
+    {{ user.username }}
+</div>
+
+<p>{{ user.username}}</p>
+
+
+
+
+{% endblock %}
