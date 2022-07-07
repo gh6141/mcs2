@@ -7,8 +7,8 @@ from django.http import HttpResponse,HttpResponseForbidden
 # Create your views here.
 from django.contrib import messages
 from django.contrib.auth import login
-from django.contrib.auth.forms import UserCreationForm
-from accounts.forms import ProfileForm
+#from django.contrib.auth.forms import UserCreationForm
+from accounts.forms import ProfileForm,UserCreationForm
 from django.http import HttpResponsePermanentRedirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView,UpdateView,DetailView
@@ -51,8 +51,8 @@ class ProfileCreateView(CreateView):
 @login_required
 def profile_edit(request, profile_id):
     user = get_object_or_404(User, pk=profile_id)
-    #if user.username != request.user.id:
-    #    return HttpResponseForbidden("このメッセージの編集は許可されていません。")
+    if user.username != request.user.username:
+        return HttpResponseForbidden("このメッセージの編集は許可されていません。")
 
     if request.method == "POST":
         form = ProfileForm(request.POST, instance=user)

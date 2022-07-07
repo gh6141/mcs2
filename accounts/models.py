@@ -78,11 +78,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     nickname=models.CharField(
         'ニックネーム',
         max_length=150,
-        unique=True,
-        validators=[nickname_validator],
-        error_messages={
-            'unique': '同じニックネームを使われている方がいます'
-        },
+        blank=True
     )
     email=models.EmailField(_('email address'),blank=False)
     sex=models.CharField("性別",max_length=10,choices=SEX,blank=True)

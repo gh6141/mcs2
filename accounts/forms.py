@@ -2,6 +2,20 @@ from django import forms
 
 from accounts.models import User
 
+from django.contrib.auth.forms import(
+  UserCreationForm as BaseUserCreationForm,
+  UserChangeForm as BaseUserChangeFrom,
+)
+
+
+class UserCreationForm(BaseUserCreationForm):
+  class Meta(BaseUserCreationForm.Meta):
+    model = User
+
+class UserChangeForm(BaseUserChangeFrom):
+  class Meta(BaseUserChangeFrom.Meta):
+    model=User
+
 
 class ProfileForm(forms.ModelForm):
     class Meta:
