@@ -72,7 +72,7 @@ class UserChangeForm(forms.ModelForm):#ユーザー更新フォームを作成
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'nickname', 'date_of_birth', 'is_active', 'is_admin','kyojuchi','kekkonreki')
+        fields = ('email', 'password', 'nickname', 'date_of_birth', 'is_active','kyojuchi','kekkonreki')
 
 
 class UserAdmin(BaseUserAdmin):#Django管理サイトの画面を編集
@@ -80,23 +80,21 @@ class UserAdmin(BaseUserAdmin):#Django管理サイトの画面を編集
     form = UserChangeForm
     add_form = UserCreationForm
 
-    list_display = ('email', 'nickname', 'date_of_birth', 'is_admin','kyojuchi','kekkonreki')
+    list_display = ('id','username','email', 'nickname', 'date_of_birth','kyojuchi','kekkonreki')
     list_filter = ('is_admin',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal name', {'fields': ('nickname',)}),
-        ('Personal info', {'fields': ('date_of_birth','kyojuchi','kekkonreki')}),
-        ('Permissions', {'fields': ('is_admin',)}),
-    
-    )
+        ('Personal name', {'fields': ('username','nickname','sex')}),
+        ('Personal info', {'fields': ('date_of_birth', 'shussin','kyojuchi','shokugyo','shumi','self_introduction','doi_flg','profile_photo1',
+        'profile_photo2','profile_photo3','profile_photo4','profile_photo5','tabako','osake','kekkonreki','kodomo','date_joined')}), )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
             'fields': ('email', 'nickname', 'date_of_birth', 'password1', 'password2'),
         }),
     )
-    search_fields = ('email',)
-    ordering = ('email',)
+    search_fields = ('username',)
+    ordering = ('username',)
     filter_horizontal = ()
 
 
