@@ -7,6 +7,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 import datetime
+from django.conf import settings
 
 # Create your models here.
 
@@ -144,5 +145,23 @@ class User(AbstractBaseUser,PermissionsMixin):
 
     def email_user(self,subject,message,from_email=None,**kwargs):
         send_mail(subject,message,from_email,[self.email],**kwargs)
+
+class Matching(models.Model):
+    approaching=models.ForeignKey(
+        settings.AUTH_USER_MODEL,related_name='approaching',
+        on_delete=models.CASCADE
+    )
+
+    approached=models.ForeignKey(
+        settings.AUTH_USER_MODEL,related_name='approached',
+        on_delete=models.CASCADE
+    )
+
+    approved=models.BooleanField(verbose_name="マッチング許可",default=False)
+    created_at=models.DateTimeField(verbose_name="登録日時",auto_now_add=True)
+    class Meta:        
+        unique_together=(('approaching','approached'))
+    def __str__(self):
+        return str(self.approaching)+'like to'+str(self.approached)
 
 

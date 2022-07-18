@@ -9,7 +9,7 @@ class Mcsmain(models.Model):
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                    verbose_name="投稿者",
                                    on_delete=models.CASCADE)
-    created_at = models.DateTimeField("投稿日", auto_now_add=True)
+    created_at = models.DateTimeField("登録日時", auto_now_add=True)
     updated_at = models.DateTimeField("更新日", auto_now=True)
 
     def __str__(self):
@@ -26,3 +26,21 @@ class Comment(models.Model):
                                     
     def __str__(self):
         return self.text
+
+class DirectMessage(models.Model):
+    created_at = models.DateTimeField("登録日時", auto_now_add=True)
+
+    sender=models.ForeignKey(
+        settings.AUTH_USER_MODEL,related_name='sender',
+        on_delete=models.CASCADE
+    )
+
+    receiver=models.ForeignKey(
+        settings.AUTH_USER_MODEL,related_name='receiver',
+        on_delete=models.CASCADE
+    )
+
+    message=models.CharField(verbose_name="メッセージ",max_length=200)
+
+    def __str__(self):
+        return str(self.sender)+'--- send to --->'+str(self.receiver)
