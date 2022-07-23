@@ -1,36 +1,63 @@
 {% extends 'base.html' %}
 
-{% block main %}
+{% load static %}
+{% load django_bootstrap5 %}
 
+{% block main %}
         <div class='welcome'>
-            <h1 class='title'>Under Construction   Blanche！</h1>
-            <p class='subtitle'>blanche(ブランシュ)は幸せになりたいアナタを全力で応援します</p>
-            <a class='btn btn-primary' href='{% url 'mcsmain_new' %}'>メッセージの作成</a>
+            <img src="{% static 'img/top_bg.jpg' %}" alt="top_bg" style=' height : 40vw ; '>
+      
+            <h1 class='title'>Under Construction</h1>
+            <p class='subtitle fw-bold'>blanche(ブランシュ)は幸せになりたいアナタを全力で応援します</p>
+            <p class='fst-italic m-auto p-auto'>blanche(ブランシュ)で純粋な出会いを楽しみませんか？<br>
+                blanche(ブランシュ)はフランス語で白を意味します。<br>
+                当サイトは白の持つ意味、純粋、希望などを強く押していきたいと思っております。<br>
+                純粋な出会い…マッチングアプリにはサクラの女性がいたり、ポイントやコインを無駄に買わせるようなものが少なくありません。<br>
+                しかし、blanche(ブランシュ)ならサクラはゼロ。<br>
+                希望的な出会い…20代から70代の方までコミュニティで趣味の話をしたりと、出会いはもちろん寂しい方が少しでも幸せを感じるようにサポートさせていただきます。<br>
+                blanche(ブランシュ)なら純粋で希望的な出会いが期待できます。<br>
+                今まで、マッチングアプリで良い出会いがなかった、サクラばかりだった、何か嫌な思いをしてしまったアナタはblanche(ブランシュ)に是非癒されに来てください。<br>
+                blanche(ブランシュ)は幸せになりたいアナタを全力で応援します。</p><br>
+
+            {% if user.is_authenticated %}
+             <a class='btn btn-primary' href='{% url 'mcsmain_new' %}'>メッセージの作成</a>
+            {% else %}
+             <a class="btn btn-primary" href="{% url 'login' %}">ログイン</a><br>
+             <a class="btn btn-primary" href="{% url 'signup' %}">会員登録</a>
+            {% endif %}
+
+
+        
+
         </div>
 
+        {% if user.is_authenticated %}
+        {% if mcsmain %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th>投稿者</th>
+                <th>投稿日</th>
+                <th>タイトル</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for data in mcsmain %}
+            <tr>
+                <th>{{ data.created_by.username }}</th>
+                <th>{{ data.created_at }}</th>
+                <th><a href="{% url 'mcsmain_detail' data.id %}">{{ data.title }}</a></th>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>メッセージはまだ投稿されていません。</p>
+        {% endif %}
 
-    {% if mcsmain %}
-    <table class="table">
-        <thead>
-        <tr>
-            <th>投稿者</th>
-            <th>投稿日</th>
-            <th>タイトル</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for data in mcsmain %}
-        <tr>
-            <th>{{ data.created_by.username }}</th>
-            <th>{{ data.created_at }}</th>
-            <th><a href="{% url 'mcsmain_detail' data.id %}">{{ data.title }}</a></th>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-    <p>メッセージはまだ投稿されていません。</p>
-    {% endif %}
+       {% endif %}
+
+   
  {% endblock %}
 
 
