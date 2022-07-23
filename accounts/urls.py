@@ -5,6 +5,8 @@ from django.urls import path,include
 from django.views.generic import CreateView
 from accounts.views import SignUpView,ProfileCreateView,profile_detail,profile_edit
 
+
+
 urlpatterns = [
 
    # path('signup/', CreateView.as_view(
@@ -35,3 +37,4 @@ urlpatterns = [
     path('reset/done/', views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 
 ]
+

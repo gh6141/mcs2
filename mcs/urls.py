@@ -19,6 +19,9 @@ from .views import testfunc,Hclass
 from mcsmain.views import top
 from accounts.views import SignUpView
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('', top , name='top'),
     path('admin/', admin.site.urls),
@@ -29,3 +32,5 @@ urlpatterns = [
    # path('accounts/signup/',SignUpView.as_view(),name='signup'),
 
 ]
+
+urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
