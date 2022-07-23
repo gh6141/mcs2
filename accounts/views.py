@@ -58,7 +58,7 @@ def profile_edit(request, profile_id):
         form = ProfileForm(request.POST, instance=user)
         if form.is_valid():
             post=form.save()
-            post.profile_photo1=request.FILES['profile_photo1']
+            post.profile_photo1=request.FILES.get('profile_photo1')
             post.save()
             return redirect('profile_detail', profile_id=profile_id)
     else:
