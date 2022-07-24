@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% load static %}
+
+{% block main %}
+
+<h2>プロフィール一覧</h2>
+    <form action="" method="get">
+        <input name="query" value="{{ request.GET.query }}" type="text">
+        <button type="submit">検索する</button>
+    </form>
+ 
+    <table border="1">
+        <tr>
+            <th>ニックネーム</th>
+            <th>photos</th>
+        </tr>
+        {% for prof in object_list %}
+        <tr>
+            <td>{{ prof.nickname }}</td>
+
+            <td>
+                {% if prof.profile_photo1 %}
+                <img src="{{ prof.profile_photo1.url }}" >
+              {% endif %}
+                
+                  </td>
+        </tr>
+        {% endfor %}
+    </table>
+ 
+    {% endblock %}

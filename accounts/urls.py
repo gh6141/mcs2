@@ -3,7 +3,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import views
 from django.urls import path,include
 from django.views.generic import CreateView
-from accounts.views import SignUpView,ProfileCreateView,profile_detail,profile_edit
+from accounts.views import SignUpView,ProfileCreateView,profile_detail,profile_edit,ProfileListView
 
 
 
@@ -20,6 +20,8 @@ urlpatterns = [
     #path('<int:pk>/profile_detail/',ProfileDetailView.as_view(),name='profile_detail'),
     path("<int:profile_id>/", profile_detail, name="profile_detail"),
     path("<int:profile_id>/profile_edit/", profile_edit, name="profile_edit"),
+
+    path('profile_list/',ProfileListView.as_view(),name='profile_list'),
     
     path('login/', LoginView.as_view(
         redirect_authenticated_user=True,

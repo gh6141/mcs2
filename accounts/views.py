@@ -11,11 +11,12 @@ from django.contrib.auth import login
 from accounts.forms import ProfileForm,UserCreationForm
 from django.http import HttpResponsePermanentRedirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView,UpdateView,DetailView
+from django.views.generic import CreateView,UpdateView,DetailView,ListView
 
 from django.contrib.auth.decorators import login_required
 
 from accounts.models import User
+from django.db.models import Q
 
 class SignUpView(CreateView):
     form_class=UserCreationForm
@@ -72,6 +73,19 @@ def profile_detail(request, profile_id):
     
     return render(request, 'accounts/profile_detail.html',
                   {'user':user,})
+
+
+
+class ProfileListView(LoginRequiredMixin,ListView): 
+    def get_queryset(self):
+        q_word = self.request.GET.get('query')
+ 
+        if q_word:
+            object_list = User.objects.filter(  Q(nickname__icontains=q_word) )
+        else:
+            object_list = User.objects.all()
+        return object_list
+
 
 """
 class ProfileEditView(LoginRequiredMixin,UpdateView):
